@@ -3,6 +3,7 @@ package ru.hogwarts.school.service;
 import ru.hogwarts.school.model.Faculty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
 
 import java.util.ArrayList;
@@ -29,6 +30,9 @@ public class FacultyService {
     }
     public void deleteFaculty(long id) {
         facultyRepository.deleteById(id);
+    }
+    public Collection<Faculty> getAllFaculties() {
+        return facultyRepository.findAll();
     }
 
 }
