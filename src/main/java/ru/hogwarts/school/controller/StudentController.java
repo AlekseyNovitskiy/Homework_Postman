@@ -58,13 +58,13 @@ public class StudentController {
         studentService.deleteStudent(id);
         return ResponseEntity.ok().build();
     }
-    @GetMapping("/age/{age}")
-    public ResponseEntity<Collection<Student>> findStudents(@RequestParam(required = false) int age) {
-        if (age > 0) {
-            return ResponseEntity.ok(studentService.findByAge(age));
-        }
-        return ResponseEntity.ok(Collections.emptyList());
-    }
+//    @GetMapping
+ //   public ResponseEntity‹Collection‹Student›› findStudents(@RequestParam(required = false) int age) {
+ //       if (age › 0) {
+ //           return ResponseEntity.ok(studentService.findByAge(age));
+//        }
+ //       return ResponseEntity.ok(Collections.emptyList());
+//    }
 
     @GetMapping("/faculty/{faculty_id}")
     public Collection<Student> findStudentsByFacultyId(@PathVariable Long faculty_id) {
