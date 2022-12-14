@@ -21,6 +21,14 @@ public class StudentController {
         this.studentService = studentService;
     }
 
+    @GetMapping
+    public ResponseEntity<Collection<Student>> findStudents(@RequestParam int min, @RequestParam int max) {
+        if (min < max) {
+            return ResponseEntity.ok(studentService.findByAgeBetween(min, max));
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @GetMapping("{id}")
     public ResponseEntity<Student> getStudentInfo(@PathVariable Long id) {
         Student student = studentService.findStudent(id);
@@ -51,12 +59,21 @@ public class StudentController {
         studentService.deleteStudent(id);
         return ResponseEntity.ok().build();
     }
-//    @GetMapping
- //   public ResponseEntity‹Collection‹Student›› findStudents(@RequestParam(required = false) int age) {
- //       if (age › 0) {
- //           return ResponseEntity.ok(studentService.findByAge(age));
-//        }
- //       return ResponseEntity.ok(Collections.emptyList());
-//    }
+    @GetMapping("/age/{age}")
+    public ResponseEntity<Collection<Student>> findStudents(@RequestParam(required = false) int age) {
+        if (age > 0) {
+            return ResponseEntity.ok(studentService.findByAge(age));
+        }
+        return ResponseEntity.ok(Collections.emptyList());
+    }
+
+    @GetMapping("/faculty/{faculty_id}")
+    public Collection<Student> findStudentsByFacultyId(@PathVariable Long faculty_id) {
+        return studentService.findStudentsByFacultyId(faculty_id);
+    }
+    @GetMapping("/students/{id}")
+    public Faculty findFacultyByStudents(@PathVariable Long id) {
+        return studentService.findStudent(id).getFaculty();
+    }
 
 }
