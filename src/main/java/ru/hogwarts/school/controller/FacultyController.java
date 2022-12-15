@@ -19,14 +19,10 @@ public class FacultyController {
     public FacultyController(FacultyService facultyService) {
         this.facultyService = facultyService;
     }
-    /*@GetMapping
-    public ResponseEntity<Faculty> findFaculties(@RequestParam(required = false) String color,
-                                                 @RequestParam(required = false) String name) {
-        if (color != null && !color.isBlank() || name != null && !name.isBlank()) {
-            return ResponseEntity.ok(facultyService.findFacultyByColorIgnoreCaseOrNameIgnoreCase(color, name));
-        }
-        return ResponseEntity.notFound().build();
-    }*/
+    @GetMapping("/search/{searchString}")
+    public Faculty findFacultyByNameOrColor(@PathVariable("searchString") String searchString){
+        return this.facultyService.findByNameOrColor(searchString);
+    }
     @GetMapping("{id}")
     public ResponseEntity<Faculty> getFacultyInfo(@PathVariable Long id) {
         Faculty faculty = facultyService.findFaculty(id);
@@ -57,14 +53,6 @@ public class FacultyController {
     public ResponseEntity<Void> deleteFaculty(@PathVariable Long id) {
         facultyService.deleteFaculty(id);
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/color/{color}")
-    public ResponseEntity<Collection<Faculty>> findFaculties(@RequestParam(required = false) String color) {
-        if (color != null && !color.isBlank()) {
-            return ResponseEntity.ok(facultyService.findByColor(color));
-        }
-        return ResponseEntity.ok(Collections.emptyList());
     }
 
 }

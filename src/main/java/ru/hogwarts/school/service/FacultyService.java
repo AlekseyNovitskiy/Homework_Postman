@@ -1,13 +1,13 @@
 package ru.hogwarts.school.service;
 
+import ru.hogwarts.school.exception.ObjectNotFoundException;
 import ru.hogwarts.school.model.Faculty;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.repository.FacultyRepository;
-import ru.hogwarts.school.repository.StudentRepository;
+
 
 import java.util.Collection;
-import java.util.Objects;
-import java.util.stream.Collectors;
+
 
 @Service
 public class FacultyService {
@@ -31,11 +31,10 @@ public class FacultyService {
     public Collection<Faculty> getAllFaculties() {
         return facultyRepository.findAll();
     }
-    public Collection<Faculty> findByColor(String color) {
-        return facultyRepository.findAll().stream().filter(s-> Objects.equals(s.getColor(), color)).collect(Collectors.toList());
-    }
-    public Faculty findFacultyByColorIgnoreCaseOrNameIgnoreCase(String color, String name){
-        return facultyRepository.findFacultyByColorIgnoreCaseOrNameIgnoreCase(color, name);
+
+    public Faculty findByNameOrColor(String nameOrColor){
+        return this.facultyRepository.findByNameIgnoreCaseOrColorIgnoreCase(nameOrColor, nameOrColor)
+                .orElseThrow(ObjectNotFoundException::new);
     }
 
 }
