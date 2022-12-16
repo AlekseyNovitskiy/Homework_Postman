@@ -22,6 +22,10 @@ public class Student {
     @JsonBackReference
     private Faculty faculty;
 
+    public Student(String name, int age) {
+
+    }
+
     public Faculty getFaculty() {
         return faculty;
     }
@@ -38,7 +42,7 @@ public class Student {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
