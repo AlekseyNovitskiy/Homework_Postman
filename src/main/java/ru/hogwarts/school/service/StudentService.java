@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -43,6 +45,18 @@ public class StudentService {
 
     public Collection<Student> findStudentsByAge(int minAge, int maxAge) {
         return this.studentRepository.findByAgeBetween(minAge, maxAge);
+    }
+
+    public Integer getAllByName() {
+        return studentRepository.getAllByName();
+    }
+
+    public Integer findByAge() {
+        return studentRepository.findByAge();
+    }
+
+    public Set<Student> getStudentsById() {
+        return studentRepository.findStudentsById();
     }
 
 

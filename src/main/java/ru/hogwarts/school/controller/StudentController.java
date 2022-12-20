@@ -9,6 +9,7 @@ import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/student")
@@ -60,4 +61,19 @@ public class StudentController {
         studentService.deleteStudent(id);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/students/getAll")
+    public Integer getAllByName() {
+        return studentService.getAllByName();
+    }
+    @GetMapping("/student/findByAge")
+    public Integer findByAge(){
+        return studentService.findByAge();
+    }
+    @GetMapping("/student/getStudentById")
+    public Set<Student> getStudentById(){
+        return studentService.getStudentsById();
+    }
+
+
 }
