@@ -1,15 +1,14 @@
 package ru.hogwarts.school.service;
 
+import ru.hogwarts.school.exception.ObjectNotFoundException;
 import ru.hogwarts.school.model.Faculty;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
 
-import java.util.ArrayList;
+
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Objects;
+import java.util.Set;
+
 
 @Service
 public class FacultyService {
@@ -18,7 +17,6 @@ public class FacultyService {
     public FacultyService(FacultyRepository facultyRepository) {
         this.facultyRepository = facultyRepository;
     }
-
     public Faculty addFaculty(Faculty faculty) {
         return facultyRepository.save(faculty);
     }
@@ -33,6 +31,15 @@ public class FacultyService {
     }
     public Collection<Faculty> getAllFaculties() {
         return facultyRepository.findAll();
+    }
+
+    public Faculty findByNameOrColor(String nameOrColor){
+        return this.facultyRepository.findByNameIgnoreCaseOrColorIgnoreCase(nameOrColor, nameOrColor)
+                .orElseThrow(ObjectNotFoundException::new);
+    }
+
+    public Set<Faculty> findByColor(String color) {
+        return facultyRepository.findByColor(color);
     }
 
 }

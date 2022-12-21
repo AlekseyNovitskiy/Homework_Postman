@@ -9,6 +9,7 @@ import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/student")
@@ -20,6 +21,12 @@ public class StudentController {
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
     }
+    @GetMapping("/age/between")
+    public Collection<Student> findStudentsByAge (@RequestParam("minAge") int min,
+                                                  @RequestParam("maxAge") int max) {
+        return this.studentService.findStudentsByAge(min, max);
+    }
+
 
     @GetMapping("{id}")
     public ResponseEntity<Student> getStudentInfo(@PathVariable Long id) {
@@ -29,10 +36,12 @@ public class StudentController {
         }
         return ResponseEntity.ok(student);
     }
+
     @GetMapping
     public ResponseEntity<Collection<Student>> getAllStudents() {
         return ResponseEntity.ok(studentService.getAllStudents());
     }
+
     @PostMapping
     public Student createStudent(@RequestBody Student student) {
         return studentService.addStudent(student);
@@ -46,17 +55,25 @@ public class StudentController {
         }
         return ResponseEntity.ok(foundStudent);
     }
+
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
         studentService.deleteStudent(id);
         return ResponseEntity.ok().build();
     }
-//    @GetMapping
- //   public ResponseEntity‹Collection‹Student›› findStudents(@RequestParam(required = false) int age) {
- //       if (age › 0) {
- //           return ResponseEntity.ok(studentService.findByAge(age));
-//        }
- //       return ResponseEntity.ok(Collections.emptyList());
-//    }
+
+    @GetMapping("/students/getAll")
+    public Integer getAllByName() {
+        return studentService.getAllByName();
+    }
+    @GetMapping("/student/findByAge")
+    public Integer findByAge(){
+        return studentService.findByAge();
+    }
+    @GetMapping("/student/getStudentById")
+    public Set<Student> getStudentById(){
+        return studentService.getStudentsById();
+    }
+
 
 }

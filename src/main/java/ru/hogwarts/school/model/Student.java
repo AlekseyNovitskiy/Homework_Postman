@@ -2,24 +2,36 @@ package ru.hogwarts.school.model;
 
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import javax.persistence.*;
 
 import java.util.Objects;
 @Entity
 public class Student {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String name;
     private int age;
 
-    public Student(long id, String name, int age) {
-        this.id = id;
-        this.name = name;
-        this.age = age;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "faculty_id",nullable = false)
+    @JsonBackReference
+    private Faculty faculty;
+
+    public Student(String name, int age) {
+
+    }
+
+    public Faculty getFaculty() {
+        return faculty;
+    }
+
+    public void setFaculty(Faculty faculty) {
+        this.faculty = faculty;
     }
 
     public Student() {
@@ -30,7 +42,7 @@ public class Student {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -70,4 +82,5 @@ public class Student {
     public int hashCode() {
         return Objects.hash(id, name, age);
     }
+
 }
