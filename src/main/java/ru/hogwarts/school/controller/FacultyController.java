@@ -5,19 +5,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.repository.FacultyRepository;
-import ru.hogwarts.school.repository.StudentRepository;
 import ru.hogwarts.school.service.FacultyService;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.Comparator;
 
 @RestController
 @RequestMapping("/faculty")
 public class FacultyController {
     private final FacultyService facultyService;
+    private final FacultyRepository facultyRepository;
 
-    public FacultyController(FacultyService facultyService) {
+    public FacultyController(FacultyService facultyService, FacultyRepository facultyRepository) {
         this.facultyService = facultyService;
+        this.facultyRepository = facultyRepository;
     }
     @GetMapping("/search/{searchString}")
     public Faculty findFacultyByNameOrColor(@PathVariable("searchString") String searchString){
@@ -53,6 +54,12 @@ public class FacultyController {
     public ResponseEntity<Void> deleteFaculty(@PathVariable Long id) {
         facultyService.deleteFaculty(id);
         return ResponseEntity.ok().build();
+    }
+    @GetMapping("/longestName")
+    public ResponseEntity<String> longestNameOrFaculty(){
+        String longestName = facultyRepository.findAll().stream()
+                .map(Faculty::getName).max(Comparator.comparing(String::length)).get();
+        return ResponseEntity.ok(longestName);
     }
 
 }
