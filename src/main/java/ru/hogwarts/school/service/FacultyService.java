@@ -2,6 +2,7 @@ package ru.hogwarts.school.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import ru.hogwarts.school.exception.ObjectNotFoundException;
 import ru.hogwarts.school.model.Faculty;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import ru.hogwarts.school.repository.FacultyRepository;
 
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Set;
 
 
@@ -52,5 +54,12 @@ public class FacultyService {
         logger.info("Был вызван метод findByColor()");
         return facultyRepository.findByColor(color);
     }
+
+    public ResponseEntity<String> longestNameOrFaculty(){
+        String longestName = facultyRepository.findAll().stream()
+                .map(Faculty::getName).max(Comparator.comparing(String::length)).get();
+        return ResponseEntity.ok(longestName);
+    }
+
 
 }

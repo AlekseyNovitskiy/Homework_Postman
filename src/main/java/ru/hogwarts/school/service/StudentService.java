@@ -2,6 +2,7 @@ package ru.hogwarts.school.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import ru.hogwarts.school.model.Student;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +11,12 @@ import ru.hogwarts.school.repository.StudentRepository;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
 public class StudentService {
+
     private final StudentRepository studentRepository;
 
     private static  final Logger logger = LoggerFactory.getLogger(StudentService.class);
@@ -71,6 +74,18 @@ public class StudentService {
     public Set<Student> getStudentsById(){
     logger.info("Был вызван метод getStudentsById()");
         return studentRepository.findStudentsById();
+    }
+    public ResponseEntity<String> findAllNameStudents(){
+        String studentsName = studentRepository.findAll().stream()
+                .map(Student::getName).map(String::toUpperCase)
+                .filter(name -> (name.charAt(0)=='A'))
+                .sorted().collect(Collectors.joining(", "));
+        return ResponseEntity.ok(studentsName);
+    }
+    public ResponseEntity<Double> findAverageAgeStudents(){
+        double averageAge= studentRepository.findAll().stream()
+                .mapToInt(Student::getAge).summaryStatistics().getAverage();
+        return ResponseEntity.ok(averageAge);
     }
 
 

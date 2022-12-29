@@ -14,16 +14,16 @@ import java.util.Comparator;
 @RequestMapping("/faculty")
 public class FacultyController {
     private final FacultyService facultyService;
-    private final FacultyRepository facultyRepository;
 
     public FacultyController(FacultyService facultyService, FacultyRepository facultyRepository) {
         this.facultyService = facultyService;
-        this.facultyRepository = facultyRepository;
     }
+
     @GetMapping("/search/{searchString}")
-    public Faculty findFacultyByNameOrColor(@PathVariable("searchString") String searchString){
+    public Faculty findFacultyByNameOrColor(@PathVariable("searchString") String searchString) {
         return this.facultyService.findByNameOrColor(searchString);
     }
+
     @GetMapping("{id}")
     public ResponseEntity<Faculty> getFacultyInfo(@PathVariable Long id) {
         Faculty faculty = facultyService.findFaculty(id);
@@ -42,6 +42,7 @@ public class FacultyController {
     public Faculty createFaculty(@RequestBody Faculty faculty) {
         return facultyService.addFaculty(faculty);
     }
+
     @PutMapping
     public ResponseEntity<Faculty> editFaculty(@RequestBody Faculty faculty) {
         Faculty foundFaculty = facultyService.editFaculty(faculty);
@@ -50,16 +51,16 @@ public class FacultyController {
         }
         return ResponseEntity.ok(foundFaculty);
     }
+
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteFaculty(@PathVariable Long id) {
         facultyService.deleteFaculty(id);
         return ResponseEntity.ok().build();
     }
+
     @GetMapping("/longestName")
-    public ResponseEntity<String> longestNameOrFaculty(){
-        String longestName = facultyRepository.findAll().stream()
-                .map(Faculty::getName).max(Comparator.comparing(String::length)).get();
-        return ResponseEntity.ok(longestName);
+    public ResponseEntity<String> longestNameOrFaculty() {
+        return facultyService.longestNameOrFaculty();
     }
 
 }
