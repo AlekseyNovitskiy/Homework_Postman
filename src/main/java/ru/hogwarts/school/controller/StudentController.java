@@ -1,15 +1,17 @@
 package ru.hogwarts.school.controller;
 
-import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.school.repository.StudentRepository;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/student")
@@ -18,12 +20,13 @@ public class StudentController {
     private final StudentService studentService;
 
 
-    public StudentController(StudentService studentService) {
+    public StudentController(StudentService studentService, StudentRepository studentRepository) {
         this.studentService = studentService;
     }
+
     @GetMapping("/age/between")
-    public Collection<Student> findStudentsByAge (@RequestParam("minAge") int min,
-                                                  @RequestParam("maxAge") int max) {
+    public Collection<Student> findStudentsByAge(@RequestParam("minAge") int min,
+                                                 @RequestParam("maxAge") int max) {
         return this.studentService.findStudentsByAge(min, max);
     }
 
@@ -66,13 +69,32 @@ public class StudentController {
     public Integer getAllByName() {
         return studentService.getAllByName();
     }
+
     @GetMapping("/student/findByAge")
-    public Integer findByAge(){
+    public Integer findByAge() {
         return studentService.findByAge();
     }
+
     @GetMapping("/student/getStudentById")
-    public Set<Student> getStudentById(){
+    public Set<Student> getStudentById() {
         return studentService.getStudentsById();
+    }
+
+    @GetMapping("/student/findAllName/")
+    ResponseEntity<String> findAllNameStudents() {
+        return studentService.findAllNameStudents();
+    }
+
+    @GetMapping("/student/getAverageAge/")
+    ResponseEntity<Double> findAverageAgeStudents() {
+        return studentService.findAverageAgeStudents();
+    }
+
+    @GetMapping("/returnInteger")
+    Integer returnInteger() {
+        int sum = Stream.iterate(1, a -> a + 1).limit(1_000_000)
+                .parallel().reduce(0, (a, b) -> a + b);
+        return sum;
     }
 
 
