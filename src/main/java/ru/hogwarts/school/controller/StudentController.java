@@ -97,5 +97,16 @@ public class StudentController {
         return sum;
     }
 
+    @GetMapping("/getListStudent")
+    List<Student> getListStudents(){
+        return studentService.getAllStudentsAndName();
+    }
+
+    @GetMapping("/getAllStudentsAndNameSynchronized")
+    List<Student> getAllStudentsAndNameSynchronized(){
+        return studentService.getAllStudentsAndNameSynchronized();
+    }
+
+
 
 }

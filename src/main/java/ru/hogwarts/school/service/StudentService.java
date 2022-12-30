@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
 @Service
 public class StudentService {
 
+    public static final Object flag = new Object();
+
     private final StudentRepository studentRepository;
 
     private static  final Logger logger = LoggerFactory.getLogger(StudentService.class);
@@ -86,6 +88,51 @@ public class StudentService {
         double averageAge= studentRepository.findAll().stream()
                 .mapToInt(Student::getAge).summaryStatistics().getAverage();
         return ResponseEntity.ok(averageAge);
+    }
+
+    public List<Student> getAllStudentsAndName() {
+        List<Student> students = studentRepository.findAll();
+        students.stream().map(Student::getName).limit(2).forEach(System.out::println);
+        Thread thread1 = new Thread(() -> {
+            students.stream().map(Student::getName).skip(2).limit(1).forEach(System.out::println);
+            students.stream().map(Student::getName).skip(3).limit(1).forEach(System.out::println);
+        });
+        Thread thread2 = new Thread(() -> {
+            students.stream().map(Student::getName).skip(4).limit(1).forEach(System.out::println);
+            students.stream().map(Student::getName).skip(5).limit(1).forEach(System.out::println);
+        });
+        thread1.start();
+        thread2.start();
+        return students;
+    }
+
+    public List<Student> getAllStudentsAndNameSynchronized(){
+        List<Student> students2 = studentRepository.findAll();
+        methodSynchronized(students2.stream().map(Student::getName).limit(1)
+                .collect(Collectors.joining()));
+        methodSynchronized(students2.stream().map(Student::getName).skip(1).limit(1)
+                .collect(Collectors.joining(",")));
+        Thread thread1 = new Thread(() -> {
+            methodSynchronized(students2.stream().map(Student::getName).skip(2).limit(1)
+                    .collect(Collectors.joining(",")));
+            methodSynchronized(students2.stream().map(Student::getName).skip(3).limit(1)
+                    .collect(Collectors.joining(",")));
+        });
+        Thread thread2 = new Thread(() -> {
+            methodSynchronized(students2.stream().map(Student::getName).skip(4).limit(1)
+                    .collect(Collectors.joining(",")));
+            methodSynchronized(students2.stream().map(Student::getName).skip(5).limit(1)
+                    .collect(Collectors.joining(",")));
+        });
+        thread1.start();
+        thread2.start();
+        return students2;
+    }
+
+    public static void methodSynchronized(String name){
+        synchronized (flag){
+            System.out.println(name);
+        }
     }
 
 
